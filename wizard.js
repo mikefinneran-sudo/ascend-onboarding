@@ -411,43 +411,131 @@ function renderAgreementDocument(container) {
     const companyName = a.company_name || '___________';
     const companyAddr = a.company_address || '___________';
 
-    function formatDate(dateStr) { if (!dateStr) return '___________'; const d = new Date(dateStr + 'T12:00:00'); return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
+    function fmtDate(dateStr) { if (!dateStr) return '___________'; const d = new Date(dateStr + 'T12:00:00'); return d.toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' }); }
 
     const title = _el('h1', 'text-xl font-bold text-center mb-6 tracking-tight', 'ASCEND SERVICES AGREEMENT');
-    const preamble = document.createElement('p'); preamble.className = 'mb-4';
-    preamble.append('THIS SERVICES AGREEMENT (which, including any attachments and exhibits hereto shall be known as the "', _el('strong', '', 'Agreement'), '") is entered into as of ', _el('strong', 'underline', formatDate(a.effective_date)), ' (the "', _el('strong', '', 'Effective Date'), '") by and between EasyPoint, Inc. DBA Ascend, a Delaware corporation (hereafter "', _el('strong', '', 'Ascend'), '"), and ', _el('strong', 'underline', companyName), ', an entity located at ', _el('strong', 'underline', companyAddr), ' (hereafter "', _el('strong', '', 'Customer'), '"). The parties hereby agree as follows:');
+
+    const preamble = document.createElement('p'); preamble.className = 'mb-6';
+    preamble.append(
+        'THIS SERVICES AGREEMENT (which, including any attachments and exhibits hereto shall be known as the \u201c',
+        _el('strong', '', 'Agreement'),
+        '\u201d) is entered into as of ',
+        _el('strong', 'underline', fmtDate(a.effective_date)),
+        ' (the \u201c',
+        _el('strong', '', 'Effective Date'),
+        '\u201d) by and between EasyPoint, Inc. DBA Ascend, a Delaware corporation (hereafter \u201c',
+        _el('strong', '', 'Ascend'),
+        '\u201d), and ',
+        _el('strong', 'underline', companyName),
+        ', an entity located at ',
+        _el('strong', 'underline', companyAddr),
+        ' (hereafter \u201c',
+        _el('strong', '', 'Customer'),
+        '\u201d). Ascend and Customer are individually referred to herein as a \u201c',
+        _el('strong', '', 'party'),
+        '\u201d and collectively as the \u201c',
+        _el('strong', '', 'parties'),
+        '\u201d. The parties hereby agree as follows:'
+    );
     container.append(title, preamble);
 
+    // Verbatim sections from the Ascend Services Agreement
     const sections = [
-        { title: 'SERVICES', text: 'Ascend agrees to provide to Customer the services outlined here: https://www.joinascend.com/#ac-pricing (collectively the \u201cServices\u201d).' },
-        { title: 'FEES', parts: ['Customer shall incur a one-time implementation fee of ', { bold: true, text: `$${implFee} USD` }, ' and a monthly recurring service fee of ', { bold: true, text: `$${monthlyFee} USD` }, '. This fee provides access to one year of Services, beginning on the Effective Date, for ', { bold: true, text: `${employees} Customer employee${employees > 1 ? 's' : ''}` }, '.'] },
-        { title: 'BOOKINGS & PAYMENT', text: 'Customer may choose between two billing methods:\n\nOption 1: Monthly Retainer. Customer may maintain a retainer account with Ascend ($10,000 USD balance by the 5th of each month). A 1.5% discount applies for same-day ACH or wire.\n\nOption 2: Pay-as-You-Go. Each booking charged in real-time to credit card on file.', highlight: true },
-        { title: 'COMMUNICATIONS', parts: ['The initial Representative under this Agreement is ', { bold: true, text: repName }, '. The primary communication channel will be WhatsApp, unless otherwise agreed in writing.'] },
-        { title: 'RELATIONSHIP BETWEEN THE PARTIES', text: 'The parties will be acting as independent contractors.' },
-        { title: 'TERM & TERMINATION', text: 'This Agreement continues until terminated with thirty (30) days\u2019 written notice.' },
-        { title: 'CONFIDENTIAL INFORMATION; IP', text: 'Each party shall keep confidential and protect the Confidential Information of the other party.' },
-        { title: 'ASCEND TERMS', text: 'Customer agrees to be bound by Ascend\u2019s Terms of Service, Privacy Policy, and Change and Cancellation Policy.' },
-        { title: 'LIMITATION OF LIABILITY', text: 'IN NO EVENT WILL EITHER PARTY\u2019S LIABILITY EXCEED THE TOTAL AMOUNT OF FEES PAID BY CUSTOMER IN THE 12 MONTHS PRIOR TO THE CLAIM.' },
-        { title: 'INDEMNIFICATION', text: 'Each party will indemnify the other from claims arising from any violation of this Agreement.' },
-        { title: 'NON-DISPARAGEMENT', text: 'Neither party shall disparage the other during the term and for twelve (12) months after termination.' },
-        { title: 'FORCE MAJEURE', text: 'Neither party shall be liable for delays from acts beyond reasonable control.' },
-        { title: 'MARKETING RIGHTS', text: 'Customer grants Ascend the right to use Customer\u2019s name and logo in marketing materials.' },
-        { title: 'MISCELLANEOUS PROVISIONS', text: 'This Agreement is the entire agreement and may be executed in counterparts.' },
+        {
+            title: 'SERVICES',
+            text: 'Ascend agrees to provide to Customer the services outlined here: https://www.joinascend.com/#ac-pricing (collectively the \u201cServices\u201d).'
+        },
+        {
+            title: 'FEES',
+            parts: [
+                'Customer shall incur a one-time implementation fee of ',
+                { bold: true, text: `two thousand five hundred dollars ($${implFee}.00 USD)` },
+                ' and a monthly recurring service fee of ',
+                { bold: true, text: `three hundred dollars ($${monthlyFee} USD)` },
+                '. This fee provides access to one year of Services, beginning on the Effective Date, for ',
+                { bold: true, text: `${employees} Customer employee${employees > 1 ? 's' : ''}` },
+                '.'
+            ]
+        },
+        {
+            title: 'BOOKINGS & PAYMENT',
+            text: 'Customer may choose between two billing methods:\n\nOption 1: Monthly Retainer. Customer may maintain a retainer account with Ascend. If selected, the Customer shall replenish the retainer to a balance of ten thousand dollars ($10,000 USD) by the 5th of each month, reflecting amounts applied toward bookings and service fees during the preceding month. This allows for consolidated monthly invoicing and charges. A 1.5% discount applies if payment is made via same-day ACH or wire transfer.\n\nOption 2: Pay-as-You-Go. If the Customer elects not to maintain a retainer, each booking will be charged in real-time to the credit card on file at the time of booking. No monthly replenishment is required under this model.\n\nAscend shall maintain a valid credit card on file for all Customers, to be used either as the primary method under Option 2, or as a backup if ACH or wire payment fails under Option 1. Ascend will not make or confirm any bookings unless sufficient funds are available either in the retainer or via the payment method on file.\n\nEach booking will be invoiced individually and deducted either from the retainer or charged directly, depending on the Customer\u2019s selected billing method. There are no prepayment obligations beyond maintaining the retainer if Option 1 is selected.',
+            highlight: true
+        },
+        {
+            title: 'COMMUNICATIONS',
+            parts: [
+                'The approval of the designated Customer Representative (\u201c',
+                { bold: true, text: 'Representative' },
+                '\u201d) is required for Ascend to make any flight booking. The initial Representative under this Agreement is ',
+                { bold: true, text: repName },
+                ' and Ascend may designate a new Representative by providing written notice to Customer. The Representative may also authorize certain Customer employees to book flights without requiring prior approval. The primary communication channel between Ascend and Customer will be WhatsApp, unless otherwise agreed in writing by the Representative.'
+            ]
+        },
+        {
+            title: 'RELATIONSHIP BETWEEN THE PARTIES',
+            text: 'The parties will be acting as independent contractors vis-\u00e0-vis each other, and nothing shall be construed to imply or construe any other relationship including without limitation employment, a partnership, or a joint-venture. Except as expressly stated herein, or as required for Ascend to render the Services, neither party shall have the authority to bind the other.'
+        },
+        {
+            title: 'TERM & TERMINATION',
+            text: 'This Agreement will commence on the Effective Date and will continue until terminated. Either party may terminate this Agreement by providing the other party no less than thirty (30) days\u2019 written notice of its decision to terminate. Termination shall not relieve either party of its obligation to pay the other party any amounts owed, and each party shall pay to the other all amounts it owes no later than ten (10) days from the date of termination.'
+        },
+        {
+            title: 'CONFIDENTIAL INFORMATION; IP',
+            text: 'Confidential Information is defined as \u201call proprietary and confidential information unique to each party, and/or its business, including without limitation data, pricing information, business practices, and the terms of this Agreement.\u201d Each party (the \u201cReceiving Party\u201d) shall keep confidential and protect the Confidential Information of the other party (the \u201cDisclosing Party\u201d) with at least the degree of care it uses to protect its own sensitive or proprietary information and in no event less than a reasonable degree of care. Nothing in this Agreement shall act as or be interpreted as a transfer of intellectual property by one party to the other.'
+        },
+        {
+            title: 'ASCEND TERMS',
+            text: 'Without limiting the applicability of anything else herein, by signing this Agreement and/or by receiving the Services, Customer affirms that it, its employees, and any other entity that uses the Services on its behalf or with its permission, is bound by and agrees to be bound by Ascend\u2019s Terms of Service (https://www.joinascend.com/terms-of-service), Privacy Policy (https://www.joinascend.com/privacy-policy), and Change and Cancellation Policy (https://fly-flat.com/change-cancellation-policy/).'
+        },
+        {
+            title: 'LIMITATION OF LIABILITY',
+            text: 'EXCEPT AS REGARDS EITHER PARTY\u2019S INDEMNIFICATION OBLIGATIONS HEREIN, IN NO EVENT WILL EITHER PARTY (OR THAT PARTY\u2019S OWNERS, DIRECTORS, OFFICERS, EMPLOYEES, AFFILIATES, AGENTS, CONTRACTORS, OR SUBCONTRACTORS) BE LIABLE TO THE OTHER PARTY FOR ANY SPECIAL, INCIDENTAL, INDIRECT, PUNITIVE, EXEMPLARY, OR CONSEQUENTIAL DAMAGES OR LOSS OF PROFITS, DATA, BUSINESS, OR GOODWILL WHETHER ARISING OUT OF BREACH OF CONTRACT, TORT (INCLUDING NEGLIGENCE), OR OTHERWISE, REGARDLESS OF WHETHER SUCH DAMAGE WAS FORESEEABLE AND WHETHER OR NOT SUCH PARTY HAS BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES. IN NO EVENT WILL EITHER PARTY\u2019S LIABILITY TO THE OTHER UNDER THIS AGREEMENT EXCEED THE TOTAL AMOUNT OF FEES PAID BY CUSTOMER IN THE 12 MONTHS PRIOR TO THE CLAIM.'
+        },
+        {
+            title: 'INDEMNIFICATION',
+            text: 'Upon the moving party\u2019s request (the \u201cMoving Party\u201d), the non-moving party (the \u201cNon-Moving Party\u201d) will indemnify, hold harmless, and defend the Moving Party and its affiliates and each of their directors, owners, officers, employees, and agents from and against any and all claims, harms, fines, fees, damages, losses, and expenses (including attorneys\u2019 fees) arising out of or resulting from any third-party claim, suit, action, or other proceeding that alleges or is based upon either of the follow by the Non-Moving Party: (i) any violation of this Agreement; or (ii) any violation of any law, rule, or regulation.'
+        },
+        {
+            title: 'NON-DISPARAGEMENT',
+            text: 'While this Agreement is in effect, and for a period of twelve (12) months after termination of this Agreement, neither party shall make statements or representations, or otherwise communicate, directly or indirectly, in writing, orally, or otherwise, or take any action which may, directly or indirectly, disparage the other party or any of its subsidiaries or affiliates or their respective officers, owners, directors, employees, advisors, businesses, or reputations. Notwithstanding the foregoing, nothing in this Agreement shall preclude either party from making truthful statements that are required by applicable law, regulation, or legal process.'
+        },
+        {
+            title: 'FORCE MAJEURE',
+            text: 'Notwithstanding anything to the contrary contained herein, neither party shall be liable to the other for any delays or failures in performance resulting from acts beyond its reasonable control, except for the obligation to pay any amounts owed hereunder.'
+        },
+        {
+            title: 'MARKETING RIGHTS',
+            text: 'Customer grants Ascend the right to use Customer\u2019s name and logo in its marketing and promotional materials, including on its website, investor presentations, pitch decks, customer lists, and case studies. Ascend may also publicly identify Customer as a client in written and oral communications. Any use of Customer\u2019s logo shall comply with any written brand guidelines provided by Customer. These rights are non-exclusive, worldwide, royalty-free, and shall survive termination of this Agreement.'
+        },
+        {
+            title: 'MISCELLANEOUS PROVISIONS',
+            text: 'This Agreement is the entire agreement of the parties and supersedes any prior agreements between them, whether written or oral, with respect to the subject matter hereof. No waiver, alteration, or modification of any of the provisions of this Agreement shall be binding unless in writing and signed by duly authorized representatives of the parties hereto. Each party agrees that if any provision of this Agreement is held to be illegal, invalid or unenforceable, such provision shall be enforced to the maximum extent permissible so as to give effect to the intent of the parties, and such provision shall otherwise be severed from this Agreement and the validity, legality and enforceability of the remaining provisions of this Agreement will not in any way be affected or impaired. Neither party may assign this Agreement or any of its rights or obligations under this Agreement without the prior written consent of the other party; provided that either party may assign this Agreement pursuant to a change of control including without limitation a merger, acquisition or sale of all or substantially all of such party\u2019s assets. Any notice shall be addressed to the party being notified at the address set forth in this Agreement or such other address as either party may notify the other of and shall be deemed given upon delivery if personally delivered or transmitted via facsimile or email, or reliable and recognized international carrier service with tracking capability (such as FedEx). This Agreement is in the English language only, and the English language version shall control in all respects. This Agreement may be executed in counterparts, each of which will be deemed to be an original, but all of which taken together will constitute the same instrument. The Agreement may be executed and delivered by email, facsimile, or PDF, which will have the same force and effect as original documents with original signatures.'
+        },
     ];
 
-    const ol = document.createElement('ol'); ol.className = 'space-y-4 list-decimal pl-5';
+    const ol = document.createElement('ol'); ol.className = 'space-y-5 list-decimal pl-5';
     sections.forEach(sec => {
         const li = document.createElement('li'); li.className = 'leading-relaxed';
         const b = document.createElement('strong'); b.textContent = sec.title + '. '; li.appendChild(b);
-        if (sec.parts) { sec.parts.forEach(part => { if (typeof part === 'string') li.append(part); else { const s = document.createElement('strong'); s.className = 'underline decoration-pri/30'; s.textContent = part.text; li.appendChild(s); } }); }
-        else if (sec.text) { sec.text.split('\n\n').forEach((line, i) => { if (i > 0) { li.appendChild(document.createElement('br')); li.appendChild(document.createElement('br')); } li.append(line); }); }
+        if (sec.parts) {
+            sec.parts.forEach(part => {
+                if (typeof part === 'string') li.append(part);
+                else { const s = document.createElement('strong'); s.className = 'underline decoration-pri/30'; s.textContent = part.text; li.appendChild(s); }
+            });
+        } else if (sec.text) {
+            sec.text.split('\n\n').forEach((line, i) => {
+                if (i > 0) { li.appendChild(document.createElement('br')); li.appendChild(document.createElement('br')); }
+                li.append(line);
+            });
+        }
         if (sec.highlight) {
             const box = document.createElement('div'); box.className = 'mt-3 p-3 rounded-md bg-pri-light border border-border-light text-sm';
             const icon = document.createElement('span'); icon.className = 'font-semibold text-pri'; icon.textContent = 'Selected: '; box.appendChild(icon);
             const span = document.createElement('span');
-            if (a.billing_method === 'retainer') span.textContent = 'Option 1: Monthly Retainer.';
-            else if (a.billing_method === 'payasyougo') span.textContent = 'Option 2: Pay-as-You-Go.';
-            else { span.className = 'italic text-txt-muted'; span.textContent = 'Not yet selected.'; }
+            if (a.billing_method === 'retainer') span.textContent = 'Option 1: Monthly Retainer. Customer shall replenish retainer to $10,000 balance by the 5th of each month. 1.5% discount for same-day ACH or wire.';
+            else if (a.billing_method === 'payasyougo') span.textContent = 'Option 2: Pay-as-You-Go. Each booking charged in real-time to credit card on file. No monthly replenishment required.';
+            else { span.className = 'italic text-txt-muted'; span.textContent = 'Billing method not yet selected.'; }
             box.appendChild(span); li.appendChild(box);
         }
         ol.appendChild(li);
@@ -456,15 +544,24 @@ function renderAgreementDocument(container) {
 
     // Signature block
     const sigBlock = document.createElement('div'); sigBlock.className = 'mt-10 pt-6 border-t border-border';
-    const sigTitle = document.createElement('p'); sigTitle.className = 'text-sm text-txt-secondary italic mb-6'; sigTitle.textContent = 'IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the Effective Date.';
-    sigBlock.appendChild(sigTitle);
+    const sigIntro = document.createElement('p'); sigIntro.className = 'text-sm text-txt-secondary italic mb-8';
+    sigIntro.textContent = 'IN WITNESS WHEREOF, the parties hereto have executed this Agreement as of the Effective Date.';
+    sigBlock.appendChild(sigIntro);
+
     const sigGrid = document.createElement('div'); sigGrid.className = 'grid grid-cols-2 gap-12';
-    const ascendSig = document.createElement('div'); ascendSig.className = 'space-y-3';
-    const at = document.createElement('p'); at.className = 'font-bold text-sm'; at.textContent = 'Ascend'; ascendSig.appendChild(at);
-    ['Signature: ___________________', 'Print Name: Zachary Resnick', 'Title: CEO', 'Date: ___________________'].forEach(line => { const p = document.createElement('p'); p.className = 'text-sm text-txt-secondary'; p.textContent = line; ascendSig.appendChild(p); });
-    const custSig = document.createElement('div'); custSig.className = 'space-y-3';
-    const ct = document.createElement('p'); ct.className = 'font-bold text-sm underline'; ct.textContent = companyName; custSig.appendChild(ct);
-    ['Signature: ___________________', 'Print Name: ___________________', 'Title: ___________________', 'Date: ___________________'].forEach(line => { const p = document.createElement('p'); p.className = 'text-sm text-txt-secondary'; p.textContent = line; custSig.appendChild(p); });
+
+    const ascendSig = document.createElement('div'); ascendSig.className = 'space-y-4';
+    const ascendH = document.createElement('p'); ascendH.className = 'font-bold text-sm'; ascendH.textContent = 'Ascend'; ascendSig.appendChild(ascendH);
+    ['Signature: ___________________', 'Print Name: Zachary Resnick', 'Title: CEO', 'Date: ___________________'].forEach(line => {
+        const p = document.createElement('p'); p.className = 'text-sm text-txt-secondary'; p.textContent = line; ascendSig.appendChild(p);
+    });
+
+    const custSig = document.createElement('div'); custSig.className = 'space-y-4';
+    const custH = document.createElement('p'); custH.className = 'font-bold text-sm underline'; custH.textContent = companyName; custSig.appendChild(custH);
+    ['Signature: ___________________', 'Print Name: ___________________', 'Title: ___________________', 'Date: ___________________'].forEach(line => {
+        const p = document.createElement('p'); p.className = 'text-sm text-txt-secondary'; p.textContent = line; custSig.appendChild(p);
+    });
+
     sigGrid.append(ascendSig, custSig); sigBlock.appendChild(sigGrid); container.appendChild(sigBlock);
 }
 
