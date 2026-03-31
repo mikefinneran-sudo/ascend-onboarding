@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascend — Enterprise Onboarding</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pri: { DEFAULT: '#6f57ff', hover: '#5a44e6', light: '#f8f7ff', ring: 'rgba(111, 87, 255, .1)' },
+                        txt: { DEFAULT: '#1a1a2e', secondary: '#667085', muted: '#98a2b3' },
+                        surface: { DEFAULT: '#fff', alt: '#f9f8f7' },
+                        border: { DEFAULT: '#e8e8e8', light: 'rgba(111, 87, 255, .08)' },
+                    },
+                    borderRadius: { sm: '6px', md: '12px', lg: '16px' },
+                    fontFamily: { sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        ::selection { background: rgba(111, 87, 255, .15); }
+        .step-dot { width: 28px; height: 28px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; transition: all .2s; }
+        .step-dot.active { background: #6f57ff; color: #fff; }
+        .step-dot.done { background: #22c55e; color: #fff; }
+        .step-dot.pending { background: #f9f8f7; color: #98a2b3; border: 1.5px solid #e8e8e8; }
+        .step-label { font-size: 12px; font-weight: 500; letter-spacing: .02em; }
+        .step-label.active { color: #6f57ff; }
+        .step-label.done { color: #22c55e; }
+        .step-label.pending { color: #98a2b3; }
+        .step-line { height: 2px; flex: 1; transition: background .2s; }
+        .step-line.done { background: #22c55e; }
+        .step-line.pending { background: #e8e8e8; }
+        .step-panel { display: none; }
+        .step-panel.active { display: block; }
+        .fade-in { animation: fadeIn .25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #6f57ff; box-shadow: 0 0 0 3px rgba(111, 87, 255, .1); }
+        .btn-pri { background: #6f57ff; color: #fff; transition: background .2s, box-shadow .2s, transform .2s; }
+        .btn-pri:hover { background: #5a44e6; box-shadow: 0 0 20px rgba(111, 87, 255, .25); }
+        .btn-pri:active { transform: scale(.98); }
+        .btn-ghost { color: #667085; transition: opacity .2s; }
+        .btn-ghost:hover { opacity: .7; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.03), 0 6px 24px rgba(0,0,0,.04); }
+    </style>
+</head>
+<body class="bg-surface-alt min-h-screen font-sans text-txt">
+
+    <header class="bg-white border-b border-border py-4 px-6">
+        <div class="max-w-4xl mx-auto flex items-center justify-between">
+            <img src="logo-navy.png" alt="Ascend" class="h-7">
+            <span class="text-xs font-semibold tracking-widest uppercase text-txt-muted">Enterprise Onboarding</span>
+        </div>
+    </header>
+
+    <nav class="bg-white border-b border-border py-5 px-6">
+        <div class="max-w-3xl mx-auto flex items-center">
+            <button onclick="goToStep(0)" class="flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="step-dot active" data-step="0">1</div>
+                <span class="step-label active" data-steplabel="0">Company</span>
+            </button>
+            <div class="step-line pending mx-2" data-line="0"></div>
+            <button onclick="goToStep(1)" class="flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="step-dot pending" data-step="1">2</div>
+                <span class="step-label pending" data-steplabel="1">Contract</span>
+            </button>
+            <div class="step-line pending mx-2" data-line="1"></div>
+            <button onclick="goToStep(2)" class="flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="step-dot pending" data-step="2">3</div>
+                <span class="step-label pending" data-steplabel="2">Travelers</span>
+            </button>
+            <div class="step-line pending mx-2" data-line="2"></div>
+            <button onclick="goToStep(3)" class="flex flex-col items-center gap-1.5 cursor-pointer">
+                <div class="step-dot pending" data-step="3">4</div>
+                <span class="step-label pending" data-steplabel="3">Review</span>
+            </button>
+        </div>
+    </nav>
+
+    <main class="max-w-3xl mx-auto py-10 px-6">
+
+        <div id="account-picker" class="mb-8">
+            <div class="flex items-center justify-between mb-5">
+                <h2 class="text-xl font-semibold tracking-tight">Onboarding Accounts</h2>
+                <button onclick="showNewAccountForm()" class="btn-pri px-5 py-2.5 rounded-md text-sm font-semibold tracking-wide">+ New Account</button>
+            </div>
+            <div id="accounts-list" class="space-y-2"></div>
+            <p id="no-accounts" class="text-txt-muted text-sm hidden">No accounts yet. Create one to get started.</p>
+        </div>
+
+        <!-- Step 0: Company -->
+        <div class="step-panel" data-panel="0">
+            <div class="card p-8 fade-in">
+                <h2 class="text-lg font-semibold tracking-tight mb-1">Company Information</h2>
+                <p class="text-sm text-txt-secondary mb-6">Enter the client's company details for the services agreement.</p>
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Name *</label><input type="text" id="company_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="e.g. Intel471 Inc"></div>
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Address</label><input type="text" id="company_address" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="e.g. 1209 Orange St, Wilmington, DE 19801"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Name *</label><input type="text" id="representative_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Primary contact"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Email</label><input type="email" id="representative_email" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="contact@company.com"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Phone</label><input type="tel" id="representative_phone" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="+1 555 123 4567"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Number of Employees</label><input type="number" id="employee_count" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="3" min="1"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">HubSpot Deal ID</label><input type="text" id="hubspot_deal_id" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Optional — links to CRM"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">AE Name</label><input type="text" id="created_by" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Who's running this onboarding?"></div>
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Notes</label><textarea id="account_notes" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" rows="2" placeholder="Any context about this account"></textarea></div>
+                </div>
+                <div class="flex justify-end mt-8"><button onclick="saveCompany()" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Save & Continue</button></div>
+            </div>
+        </div>
+
+        <!-- Step 1: Contract -->
+        <div class="step-panel" data-panel="1">
+            <div class="card p-8 fade-in">
+                <h2 class="text-lg font-semibold tracking-tight mb-1">Services Agreement</h2>
+                <p class="text-sm text-txt-secondary mb-6">Set the contract terms. You'll preview and send for signature in the final step.</p>
+                <div class="grid grid-cols-2 gap-4 mb-6">
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Effective Date</label><input type="date" id="effective_date" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Billing Method</label><select id="billing_method" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm"><option value="">Select...</option><option value="retainer">Monthly Retainer ($10,000 balance, 1.5% ACH discount)</option><option value="payasyougo">Pay-as-You-Go (credit card at booking)</option></select></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Implementation Fee</label><input type="number" id="implementation_fee" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="2500" step="100"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Monthly Fee</label><input type="number" id="monthly_fee" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="300" step="50"></div>
+                </div>
+                <div class="bg-pri-light rounded-lg p-5 mb-6 text-sm text-txt-secondary border border-border-light"><p class="font-semibold text-txt mb-2">Agreement Summary</p><p id="summary-text">Complete company information first.</p></div>
+                <div id="contract-status-bar" class="flex items-center gap-3 mb-6"><span class="text-sm font-medium text-txt">Status:</span><span id="contract-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-700">Draft</span></div>
+                <div class="flex justify-between"><button onclick="goToStep(0)" class="btn-ghost text-sm font-medium">Back</button><button onclick="saveContractAndContinue()" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Save & Continue</button></div>
+            </div>
+        </div>
+
+        <!-- Step 2: Travelers -->
+        <div class="step-panel" data-panel="2">
+            <div class="card p-8 fade-in">
+                <h2 class="text-lg font-semibold tracking-tight mb-1">Travelers</h2>
+                <p class="text-sm text-txt-secondary mb-6">Add travelers who will use Ascend's services under this account.</p>
+                <div id="traveler-list" class="space-y-3 mb-6"></div>
+                <div class="border-2 border-dashed border-border rounded-lg p-5">
+                    <p class="text-sm font-semibold text-txt mb-3">Add Traveler</p>
+                    <div class="grid grid-cols-3 gap-3">
+                        <input type="text" id="new_traveler_name" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Full name *">
+                        <input type="email" id="new_traveler_email" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Email">
+                        <input type="tel" id="new_traveler_phone" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Phone">
+                    </div>
+                    <div class="flex items-center gap-4 mt-3">
+                        <label class="flex items-center gap-2 text-sm text-txt-secondary cursor-pointer"><input type="checkbox" id="new_traveler_rep" class="accent-pri"> Primary representative</label>
+                        <button onclick="addTraveler()" class="btn-pri px-4 py-2 rounded-md text-sm font-semibold ml-auto">Add</button>
+                    </div>
+                </div>
+                <div class="flex justify-between mt-8"><button onclick="goToStep(1)" class="btn-ghost text-sm font-medium">Back</button><button onclick="goToStep(3)" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Continue to Review</button></div>
+            </div>
+        </div>
+
+        <!-- Step 3: Review & Send -->
+        <div class="step-panel" data-panel="3">
+            <div class="card p-8 fade-in">
+                <h2 class="text-lg font-semibold tracking-tight mb-1">Review & Send for Signature</h2>
+                <p class="text-sm text-txt-secondary mb-6">Review everything before sending the agreement. Click any section to edit.</p>
+                <div id="review-content" class="space-y-5"></div>
+                <div class="mt-6 pt-5 border-t border-border">
+                    <div class="flex items-center justify-between mb-5">
+                        <div class="flex items-center gap-3"><span class="text-sm font-medium text-txt">Contract Status:</span><span id="review-contract-badge" class="px-3 py-1 rounded-full text-xs font-semibold bg-yellow-50 text-yellow-700">Draft</span></div>
+                        <button onclick="openAgreementPreview()" class="text-sm font-medium text-pri hover:underline">Preview Full Agreement</button>
+                    </div>
+                </div>
+                <div class="flex justify-between"><button onclick="goToStep(2)" class="btn-ghost text-sm font-medium">Back</button>
+                    <div class="flex gap-3">
+                        <button onclick="sendContract()" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Send for Signature</button>
+                        <button onclick="completeOnboarding()" class="bg-green-600 hover:bg-green-700 text-white px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide transition-colors">Complete Onboarding</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Completion -->
+        <div id="complete-screen" class="hidden">
+            <div class="card p-10 text-center fade-in">
+                <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5"><svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg></div>
+                <h2 class="text-xl font-semibold tracking-tight mb-2">Onboarding Complete</h2>
+                <p id="complete-message" class="text-txt-secondary text-sm mb-6"></p>
+                <button onclick="resetWizard()" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Start Another</button>
+            </div>
+        </div>
+
+        <div id="toast" class="fixed bottom-6 right-6 bg-txt text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium hidden transition-opacity"></div>
+    </main>
+
+    <!-- Agreement Preview Modal -->
+    <div id="agreement-modal" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" onclick="closeAgreementPreview()"></div>
+        <div class="absolute inset-4 md:inset-y-8 md:inset-x-auto md:max-w-3xl md:mx-auto bg-white rounded-xl shadow-2xl flex flex-col overflow-hidden">
+            <div class="flex items-center justify-between px-6 py-4 border-b border-border bg-surface-alt"><h2 class="text-base font-semibold text-txt">Ascend Services Agreement — Preview</h2><button onclick="closeAgreementPreview()" class="text-txt-muted hover:text-txt text-xl leading-none px-2">&times;</button></div>
+            <div id="agreement-body" class="flex-1 overflow-y-auto px-8 py-6 text-sm text-txt leading-relaxed"></div>
+            <div class="flex items-center justify-between px-6 py-4 border-t border-border bg-surface-alt"><button onclick="closeAgreementPreview()" class="btn-ghost text-sm font-medium">Close</button><button onclick="closeAgreementPreview(); sendContract();" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Send for Signature</button></div>
+        </div>
+    </div>
+
+    <script src="wizard.js"></script>
+</body>
+</html>
