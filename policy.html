@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ascend — Travel Policy & Preferences</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        pri: { DEFAULT: '#6f57ff', hover: '#5a44e6', light: '#f8f7ff', ring: 'rgba(111, 87, 255, .1)' },
+                        txt: { DEFAULT: '#1a1a2e', secondary: '#667085', muted: '#98a2b3' },
+                        surface: { DEFAULT: '#fff', alt: '#f9f8f7' },
+                        border: { DEFAULT: '#e8e8e8', light: 'rgba(111, 87, 255, .08)' },
+                    },
+                    borderRadius: { sm: '6px', md: '12px', lg: '16px' },
+                    fontFamily: { sans: ['system-ui', '-apple-system', 'Segoe UI', 'Roboto', 'sans-serif'] },
+                }
+            }
+        }
+    </script>
+    <style>
+        body { -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale; }
+        ::selection { background: rgba(111, 87, 255, .15); }
+        input:focus, select:focus, textarea:focus { outline: none; border-color: #6f57ff; box-shadow: 0 0 0 3px rgba(111, 87, 255, .1); }
+        .btn-pri { background: #6f57ff; color: #fff; transition: background .2s, box-shadow .2s, transform .2s; }
+        .btn-pri:hover { background: #5a44e6; box-shadow: 0 0 20px rgba(111, 87, 255, .25); }
+        .btn-pri:active { transform: scale(.98); }
+        .btn-ghost { color: #667085; transition: opacity .2s; }
+        .btn-ghost:hover { opacity: .7; }
+        .card { background: #fff; border-radius: 16px; box-shadow: 0 1px 3px rgba(0,0,0,.03), 0 6px 24px rgba(0,0,0,.04); }
+        .fade-in { animation: fadeIn .25s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+        .tab-btn.active { background: #6f57ff; color: #fff; }
+        .tab-btn:not(.active) { background: #f9f8f7; color: #667085; }
+        .tab-btn:not(.active):hover { background: #e8e8e8; }
+    </style>
+</head>
+<body class="bg-surface-alt min-h-screen font-sans text-txt">
+
+    <header class="bg-white border-b border-border py-4 px-6">
+        <div class="max-w-3xl mx-auto flex items-center justify-between">
+            <img src="logo-navy.png" alt="Ascend" class="h-7">
+            <span class="text-xs font-semibold tracking-widest uppercase text-txt-muted">Travel Policy & Preferences</span>
+        </div>
+    </header>
+
+    <main class="max-w-3xl mx-auto py-10 px-6">
+
+        <!-- Welcome -->
+        <div id="welcome-banner" class="card p-6 mb-8 fade-in">
+            <h1 class="text-lg font-semibold tracking-tight mb-1">Welcome to Ascend</h1>
+            <p class="text-sm text-txt-secondary">Your agreement has been signed. Please complete the information below so our team can start booking for you right away. This takes about 2 minutes.</p>
+        </div>
+
+        <!-- Section 1: Team Members -->
+        <div class="card p-8 mb-6 fade-in">
+            <h2 class="text-lg font-semibold tracking-tight mb-1">Team Members</h2>
+            <p class="text-sm text-txt-secondary mb-6">Everyone who will be traveling under this account. You can add more at any time.</p>
+
+            <div id="member-list" class="space-y-3 mb-6"></div>
+
+            <div class="border-2 border-dashed border-border rounded-lg p-5">
+                <p class="text-sm font-semibold text-txt mb-3">Add Team Member</p>
+                <div class="grid grid-cols-3 gap-3">
+                    <input type="text" id="new_member_name" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Full name *">
+                    <input type="email" id="new_member_email" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Email">
+                    <input type="tel" id="new_member_phone" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Phone">
+                </div>
+                <div class="flex justify-end mt-3">
+                    <button onclick="addMember()" class="btn-pri px-4 py-2 rounded-md text-sm font-semibold">Add</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Section 2: Traveler Preferences -->
+        <div class="card p-8 mb-6 fade-in">
+            <h2 class="text-lg font-semibold tracking-tight mb-1">Traveler Preferences</h2>
+            <p class="text-sm text-txt-secondary mb-6">Select each team member to set their travel preferences.</p>
+
+            <div id="pref-tabs" class="flex flex-wrap gap-2 mb-5"></div>
+            <div id="pref-form"></div>
+        </div>
+
+        <!-- Section 3: Corporate Travel Policy -->
+        <div class="card p-8 mb-6 fade-in">
+            <h2 class="text-lg font-semibold tracking-tight mb-1">Corporate Travel Policy</h2>
+            <p class="text-sm text-txt-secondary mb-6">Quick selections so our team knows the rules. All fields are optional.</p>
+
+            <div class="grid grid-cols-2 gap-4">
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Approved Cabin</label>
+                    <select id="pol_cabin" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="economy_only">Economy only</option>
+                        <option value="economy_premium">Economy + Premium Economy</option>
+                        <option value="business_allowed">Business class allowed</option>
+                        <option value="first_allowed">First class allowed</option>
+                        <option value="no_restriction">No restriction</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Booking Advance</label>
+                    <select id="pol_advance" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="none">No requirement</option>
+                        <option value="7_days">7+ days before travel</option>
+                        <option value="14_days">14+ days before travel</option>
+                        <option value="21_days">21+ days before travel</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Approval Required Over</label>
+                    <select id="pol_approval" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="no_approval">No approval needed</option>
+                        <option value="2500">$2,500</option>
+                        <option value="5000">$5,000</option>
+                        <option value="10000">$10,000</option>
+                        <option value="all">All bookings need approval</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Max Hotel Rate / Night</label>
+                    <select id="pol_hotel" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="150">$150</option>
+                        <option value="250">$250</option>
+                        <option value="350">$350</option>
+                        <option value="500">$500</option>
+                        <option value="no_limit">No limit</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">International Travel</label>
+                    <select id="pol_international" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="allowed">Allowed</option>
+                        <option value="requires_approval">Requires approval</option>
+                        <option value="not_allowed">Not allowed</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Creative Routing OK?</label>
+                    <select id="pol_creative_routing" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes (maximize savings)</option>
+                        <option value="no">No (standard routing only)</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Separated Segments OK?</label>
+                    <select id="pol_separated" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes</option>
+                        <option value="no">No</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="block text-sm font-medium text-txt mb-1.5">Ancillary Services?</label>
+                    <select id="pol_ancillary" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm">
+                        <option value="">Select...</option>
+                        <option value="yes">Yes (hotels, trains, cars)</option>
+                        <option value="no">No (flights only)</option>
+                    </select>
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-txt mb-1.5">Preferred Airlines</label>
+                    <input type="text" id="pol_airlines" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="e.g. United, Delta, American (leave blank for no preference)">
+                </div>
+                <div class="col-span-2">
+                    <label class="block text-sm font-medium text-txt mb-1.5">Additional Notes</label>
+                    <textarea id="pol_custom" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" rows="3" placeholder="Any other travel policy details or special instructions"></textarea>
+                </div>
+            </div>
+        </div>
+
+        <!-- Submit -->
+        <div class="flex justify-end mb-10">
+            <button onclick="submitAll()" class="btn-pri px-8 py-3 rounded-md text-sm font-semibold tracking-wide">Submit</button>
+        </div>
+
+        <!-- Success -->
+        <div id="success-screen" class="hidden">
+            <div class="card p-10 text-center fade-in">
+                <div class="w-16 h-16 rounded-full bg-green-50 flex items-center justify-center mx-auto mb-5">
+                    <svg class="w-8 h-8 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"></path></svg>
+                </div>
+                <h2 class="text-xl font-semibold tracking-tight mb-2">All Set</h2>
+                <p class="text-txt-secondary text-sm mb-2">Your travel policy and preferences have been submitted.</p>
+                <p class="text-txt-secondary text-sm">Your Ascend team will reach out on WhatsApp shortly to confirm everything and get you booked.</p>
+            </div>
+        </div>
+
+        <div id="toast" class="fixed bottom-6 right-6 bg-txt text-white px-5 py-3 rounded-lg shadow-lg text-sm font-medium hidden transition-opacity"></div>
+    </main>
+
+    <script src="policy.js"></script>
+</body>
+</html>
