@@ -98,15 +98,15 @@
                 <h2 class="text-lg font-semibold tracking-tight mb-1">Company Information</h2>
                 <p class="text-sm text-txt-secondary mb-6">Enter the client's company details for the services agreement.</p>
                 <div class="grid grid-cols-2 gap-4">
-                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Name *</label><input type="text" id="company_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="e.g. Intel471 Inc"></div>
-                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Address</label><input type="text" id="company_address" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="e.g. 1209 Orange St, Wilmington, DE 19801"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Name *</label><input type="text" id="representative_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Primary contact"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Email</label><input type="email" id="representative_email" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="contact@company.com"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Phone</label><input type="tel" id="representative_phone" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="+1 555 123 4567"></div>
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Name *</label><input type="text" id="company_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="Intel471 Inc" placeholder="e.g. Intel471 Inc"></div>
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Company Address</label><input type="text" id="company_address" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="1209 Orange St, Wilmington, DE 19801" placeholder="e.g. 1209 Orange St, Wilmington, DE 19801"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Name *</label><input type="text" id="representative_name" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="Mike Finneran" placeholder="Primary contact"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Email</label><input type="email" id="representative_email" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="mdebolt@intel471.com" placeholder="contact@company.com"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Representative Phone</label><input type="tel" id="representative_phone" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="+1 555 867 5309" placeholder="+1 555 123 4567"></div>
                     <div><label class="block text-sm font-medium text-txt mb-1.5">Number of Employees</label><input type="number" id="employee_count" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="3" min="1"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">HubSpot Deal ID</label><input type="text" id="hubspot_deal_id" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Optional — links to CRM"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">AE Name</label><input type="text" id="created_by" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Who's running this onboarding?"></div>
-                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Notes</label><textarea id="account_notes" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" rows="2" placeholder="Any context about this account"></textarea></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">HubSpot Deal ID</label><input type="text" id="hubspot_deal_id" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="872357555" placeholder="Optional — links to CRM"></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">AE Name</label><input type="text" id="created_by" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="Zach Resnick" placeholder="Who's running this onboarding?"></div>
+                    <div class="col-span-2"><label class="block text-sm font-medium text-txt mb-1.5">Notes</label><textarea id="account_notes" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" rows="2" placeholder="Any context about this account">Enterprise client, 3 employees, referred by existing member</textarea></div>
                 </div>
                 <div class="flex justify-end mt-8"><button onclick="saveCompany()" class="btn-pri px-6 py-2.5 rounded-md text-sm font-semibold tracking-wide">Save & Continue</button></div>
             </div>
@@ -119,7 +119,7 @@
                 <p class="text-sm text-txt-secondary mb-6">Set the contract terms. You'll preview and send for signature in the final step.</p>
                 <div class="grid grid-cols-2 gap-4 mb-6">
                     <div><label class="block text-sm font-medium text-txt mb-1.5">Effective Date</label><input type="date" id="effective_date" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm"></div>
-                    <div><label class="block text-sm font-medium text-txt mb-1.5">Billing Method</label><select id="billing_method" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm"><option value="">Select...</option><option value="retainer">Monthly Retainer ($10,000 balance, 1.5% ACH discount)</option><option value="payasyougo">Pay-as-You-Go (credit card at booking)</option></select></div>
+                    <div><label class="block text-sm font-medium text-txt mb-1.5">Billing Method</label><select id="billing_method" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm"><option value="">Select...</option><option value="retainer" selected>Monthly Retainer ($10,000 balance, 1.5% ACH discount)</option><option value="payasyougo">Pay-as-You-Go (credit card at booking)</option></select></div>
                     <div><label class="block text-sm font-medium text-txt mb-1.5">Implementation Fee</label><input type="number" id="implementation_fee" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="2500" step="100"></div>
                     <div><label class="block text-sm font-medium text-txt mb-1.5">Monthly Fee</label><input type="number" id="monthly_fee" class="w-full border border-border rounded-md px-3.5 py-2.5 text-sm" value="300" step="50"></div>
                 </div>
@@ -138,9 +138,9 @@
                 <div class="border-2 border-dashed border-border rounded-lg p-5">
                     <p class="text-sm font-semibold text-txt mb-3">Add Traveler</p>
                     <div class="grid grid-cols-3 gap-3">
-                        <input type="text" id="new_traveler_name" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Full name *">
-                        <input type="email" id="new_traveler_email" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Email">
-                        <input type="tel" id="new_traveler_phone" class="border border-border rounded-md px-3.5 py-2.5 text-sm" placeholder="Phone">
+                        <input type="text" id="new_traveler_name" class="border border-border rounded-md px-3.5 py-2.5 text-sm" value="Mark DeBolt" placeholder="Full name *">
+                        <input type="email" id="new_traveler_email" class="border border-border rounded-md px-3.5 py-2.5 text-sm" value="mdebolt@intel471.com" placeholder="Email">
+                        <input type="tel" id="new_traveler_phone" class="border border-border rounded-md px-3.5 py-2.5 text-sm" value="+1 555 867 5309" placeholder="Phone">
                     </div>
                     <div class="flex items-center gap-4 mt-3">
                         <label class="flex items-center gap-2 text-sm text-txt-secondary cursor-pointer"><input type="checkbox" id="new_traveler_rep" class="accent-pri"> Primary representative</label>
