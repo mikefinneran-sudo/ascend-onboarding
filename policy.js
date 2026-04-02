@@ -54,12 +54,14 @@ function save() {
     localStorage.setItem(STORAGE_KEY, JSON.stringify({ members, policy: collectPolicy() }));
 }
 
+
 // ---- Init ----
 
 document.addEventListener('DOMContentLoaded', () => {
     loadDemo();
     renderMembers();
     renderPrefTabs();
+    renderCallBooking();
 });
 
 // ---- Toast ----
@@ -118,7 +120,7 @@ function renderMembers() {
         const removeBtn = document.createElement('button');
         removeBtn.className = 'text-red-400 hover:text-red-600 text-sm px-1';
         removeBtn.textContent = 'Remove';
-        removeBtn.addEventListener('click', () => { members = members.filter(x => x.id !== m.id); save(); renderMembers(); renderPrefTabs(); toast('Removed'); });
+        removeBtn.addEventListener('click', () => { members = members.filter(x => x.id !== m.id); save(); renderMembers(); renderPrefTabs(); renderCallBooking(); toast('Removed'); });
         right.appendChild(removeBtn);
 
         row.append(left, right);
@@ -140,6 +142,7 @@ function addMember() {
     save();
     renderMembers();
     renderPrefTabs();
+    renderCallBooking();
 
     document.getElementById('new_member_name').value = '';
     document.getElementById('new_member_email').value = '';
@@ -258,6 +261,49 @@ function populatePolicy(policy) {
     });
     if (policy.preferred_airlines) document.getElementById('pol_airlines').value = policy.preferred_airlines;
     if (policy.custom_notes) document.getElementById('pol_custom').value = policy.custom_notes;
+}
+
+// ---- Preferences Call Booking ----
+
+function renderCallBooking() {
+    const list = document.getElementById('call-booking-list');
+    list.replaceChildren();
+    if (members.length === 0) {
+        const p = document.createElement('p');
+        p.className = 'text-sm text-txt-muted';
+        p.textContent = 'Add team members above first.';
+        list.appendChild(p);
+        return;
+    }
+    members.forEach((m, i) => {
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between bg-surface-alt rounded-lg p-4 border border-border';
+
+        const nameEl = document.createElement('span');
+        nameEl.className = 'font-medium text-txt text-sm';
+        nameEl.textContent = m.name;
+
+        const options = document.createElement('div');
+        options.className = 'flex gap-2';
+
+        const currentChoice = m.preferences_call || '';
+        [['ai_agent', 'AI Agent'], ['person', 'A Person'], ['skip', 'Skip']].forEach(([value, label]) => {
+            const btn = document.createElement('button');
+            btn.className = currentChoice === value
+                ? 'px-3 py-1.5 rounded-md text-xs font-semibold border border-pri bg-pri-light text-pri transition-colors'
+                : 'px-3 py-1.5 rounded-md text-xs font-semibold border border-border text-txt-secondary hover:border-pri/50 transition-colors';
+            btn.textContent = label;
+            btn.addEventListener('click', () => {
+                m.preferences_call = value;
+                save();
+                renderCallBooking();
+            });
+            options.appendChild(btn);
+        });
+
+        row.append(nameEl, options);
+        list.appendChild(row);
+    });
 }
 
 // ---- Submit ----
